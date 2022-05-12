@@ -17,7 +17,7 @@ import java.util.List;
 public class SurvivalBrush extends EldoPlugin {
     @Override
     public void onPluginEnable() throws Throwable {
-        Configuration configuration = new Configuration(this);
+        var configuration = new Configuration(this);
         registerListener(new PasteListener(this, configuration));
     }
 

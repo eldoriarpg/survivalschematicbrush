@@ -1,3 +1,5 @@
+import de.chojo.Repo
+
 plugins {
     id("org.cadixdev.licenser") version "0.6.1"
     id("com.github.johnrengelman.shadow") version "7.1.2"
@@ -34,6 +36,12 @@ java {
     sourceCompatibility = JavaVersion.VERSION_17
 }
 
+publishData {
+    addRepo(Repo.main("", "https://eldonexus.de/repository/maven-releases/", false))
+    addRepo(Repo.dev("DEV", "https://eldonexus.de/repository/maven-dev/", true))
+    addRepo(Repo.snapshot("SNAPSHOT", "https://eldonexus.de/repository/maven-snapshots/", true))
+    publishComponent("java")
+}
 
 publishing {
     publications.create<MavenPublication>("maven") {

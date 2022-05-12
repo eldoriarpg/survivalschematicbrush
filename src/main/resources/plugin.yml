@@ -13,3 +13,6 @@ permissions:
   survivalschematicbrush.limit.bypass:
     default: false
     description: Allow to bypass max schematic size
+  survivalschematicbrush.limit.<limit>:
+    default: false
+    description: Set the max blocks a schematic can have
