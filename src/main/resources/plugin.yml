@@ -1,0 +1,18 @@
+name: SurvivalSchematicBrush
+version: ${version}
+api-version: 1.13
+author: Hadde
+main: de.eldoria.survivalbrush.SurvivalBrush
+depend:
+  - SchematicBrushReborn
+
+permissions:
+  survivalschematicbrush.paste.bypass:
+    default: false
+    description: Allow to bypass block pasting check when in survival
+  survivalschematicbrush.limit.bypass:
+    default: false
+    description: Allow to bypass max schematic size
+  survivalschematicbrush.limit.<limit>:
+    default: false
+    description: Set the max blocks a schematic can have
