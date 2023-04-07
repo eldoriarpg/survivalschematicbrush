@@ -11,6 +11,7 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import de.eldoria.eldoutilities.container.Pair;
 import de.eldoria.schematicbrush.event.PrePasteEvent;
 import de.eldoria.survivalbrush.configuration.Configuration;
+import de.eldoria.survivalbrush.configuration.LegacyConfiguration;
 import de.eldoria.survivalbrush.util.Permissions;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;

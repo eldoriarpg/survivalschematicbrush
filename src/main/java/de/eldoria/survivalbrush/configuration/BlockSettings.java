@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("FieldMayBeFinal")
 public class BlockSettings implements ConfigurationSerializable {
     private static final List<Material> DEFAULT_BLACKLIST = List.of(Material.SHULKER_BOX,
             Material.WHITE_SHULKER_BOX,
@@ -34,7 +35,7 @@ public class BlockSettings implements ConfigurationSerializable {
             Material.CHEST,
             Material.TRAPPED_CHEST,
             Material.FURNACE);
-    private final List<Material> pasteBlacklist;
+    private List<Material> pasteBlacklist;
 
     public BlockSettings() {
         pasteBlacklist = DEFAULT_BLACKLIST;
