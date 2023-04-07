@@ -1,9 +1,11 @@
 import de.chojo.Repo
+import net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.FALSE
 
 plugins {
     id("org.cadixdev.licenser") version "0.6.1"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("de.chojo.publishdata") version "1.2.4"
+    id("net.minecrell.plugin-yml.bukkit") version "0.5.3"
     java
     `maven-publish`
 }
@@ -17,9 +19,16 @@ repositories {
 }
 
 dependencies {
-    compileOnly("de.eldoria", "schematicbrushreborn-api", "2.4.3")
+    compileOnly("de.eldoria", "schematicbrushreborn-api", "2.5.0-DEV")
     compileOnly("org.spigotmc", "spigot-api", "1.13.2-R0.1-SNAPSHOT")
     compileOnly("com.sk89q.worldedit", "worldedit-bukkit", "7.2.14")
+
+    bukkitLibrary("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2")
+    bukkitLibrary("com.fasterxml.jackson.core:jackson-core:2.14.2")
+    bukkitLibrary("com.fasterxml.jackson.core:jackson-databind:2.14.2")
+    bukkitLibrary("net.kyori:adventure-platform-bukkit:4.3.0")
+    bukkitLibrary("net.kyori:adventure-text-minimessage:4.13.0")
+
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
@@ -37,6 +46,7 @@ java {
 }
 
 publishData {
+    addBuildData()
     addRepo(Repo.main("", "https://eldonexus.de/repository/maven-releases/", false))
     addRepo(Repo.dev("DEV", "https://eldonexus.de/repository/maven-dev/", true))
     addRepo(Repo.snapshot("SNAPSHOT", "https://eldonexus.de/repository/maven-snapshots/", true))
@@ -82,7 +92,6 @@ tasks {
     shadowJar {
         relocate("de.eldoria.eldoutilities", "de.eldoria.schematicbrush.libs.eldoutilities")
         relocate("de.eldoria.messageblocker", "de.eldoria.schematicbrush.libs.messageblocker")
-        relocate("net.kyori", "de.eldoria.schematicbrush.libs.kyori")
         mergeServiceFiles()
     }
 
@@ -90,7 +99,7 @@ tasks {
         from(sourceSets.main.get().resources.srcDirs) {
             filesMatching("plugin.yml") {
                 expand(
-                    "version" to publishData.getVersion(true)
+                        "version" to publishData.getVersion(true)
                 )
             }
             duplicatesStrategy = DuplicatesStrategy.INCLUDE
@@ -110,5 +119,31 @@ tasks {
 
     build {
         dependsOn(shadowJar)
+    }
+}
+
+bukkit {
+    name = "SurvivalSchematicBrush"
+    main = "de.eldoria.survivalbrush.SurvivalBrush"
+    apiVersion = "1.16"
+    version = publishData.getVersion(true)
+    authors = listOf("RainbowDashLabs")
+    depend = listOf("SchematicBrushReborn")
+
+    permissions {
+        register("survivalschematicbrush.paste.bypass") {
+            default = FALSE
+            description = "Allow to bypass block pasting check when in survival"
+        }
+
+        register("survivalschematicbrush.limit.bypass") {
+            default = FALSE
+            description = "Allow to bypass max schematic size"
+        }
+
+        register("survivalschematicbrush.limit.<limit>") {
+            default = FALSE
+            description = "Set the max blocks a schematic can have"
+        }
     }
 }
