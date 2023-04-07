@@ -8,6 +8,8 @@ package de.eldoria.survivalbrush;
 
 import de.eldoria.eldoutilities.config.template.PluginBaseConfiguration;
 import de.eldoria.eldoutilities.plugin.EldoPlugin;
+import de.eldoria.eldoutilities.updater.lynaupdater.LynaUpdateChecker;
+import de.eldoria.eldoutilities.updater.lynaupdater.LynaUpdateData;
 import de.eldoria.survivalbrush.configuration.BlockSettings;
 import de.eldoria.survivalbrush.configuration.JacksonConfiguration;
 import de.eldoria.survivalbrush.configuration.LegacyConfiguration;
@@ -30,6 +32,8 @@ public class SurvivalBrush extends EldoPlugin {
             base.lastInstalledVersion(this);
             configuration.save();
         }
+
+        LynaUpdateChecker.lyna(LynaUpdateData.builder(this, 7).build()).start();
 
         registerListener(new PasteListener(this, configuration));
     }
