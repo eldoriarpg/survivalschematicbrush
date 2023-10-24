@@ -21,7 +21,7 @@ repositories {
 dependencies {
     compileOnly("de.eldoria", "schematicbrushreborn-api", "2.5.4")
     compileOnly("org.spigotmc", "spigot-api", "1.13.2-R0.1-SNAPSHOT")
-    compileOnly("com.sk89q.worldedit", "worldedit-bukkit", "7.2.14")
+    compileOnly("com.sk89q.worldedit", "worldedit-bukkit", "7.2.17")
 
     bukkitLibrary("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2")
     bukkitLibrary("com.fasterxml.jackson.core:jackson-core:2.14.2")
