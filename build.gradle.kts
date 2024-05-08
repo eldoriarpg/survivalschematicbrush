@@ -27,7 +27,7 @@ dependencies {
     bukkitLibrary("com.fasterxml.jackson.core:jackson-core:2.14.2")
     bukkitLibrary("com.fasterxml.jackson.core:jackson-databind:2.14.2")
     bukkitLibrary("net.kyori:adventure-platform-bukkit:4.3.1")
-    bukkitLibrary("net.kyori:adventure-text-minimessage:4.13.1")
+    bukkitLibrary("net.kyori:adventure-text-minimessage:4.17.0")
 
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
