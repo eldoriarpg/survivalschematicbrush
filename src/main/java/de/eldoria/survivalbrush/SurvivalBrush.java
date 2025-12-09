@@ -39,6 +39,11 @@ public class SurvivalBrush extends EldoPlugin {
     }
 
     @Override
+    public Level getLogLevel() {
+        return Level.INFO;
+    }
+
+    @Override
     public List<Class<? extends ConfigurationSerializable>> getConfigSerialization() {
         return List.of(BlockSettings.class);
     }

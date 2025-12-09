@@ -9,12 +9,10 @@ package de.eldoria.survivalbrush.listener;
 import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import de.eldoria.eldoutilities.container.Pair;
+import de.eldoria.eldoutilities.messages.MessageSender;
 import de.eldoria.schematicbrush.event.PrePasteEvent;
 import de.eldoria.survivalbrush.configuration.Configuration;
-import de.eldoria.survivalbrush.configuration.LegacyConfiguration;
 import de.eldoria.survivalbrush.util.Permissions;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -34,12 +32,11 @@ public class PasteListener implements Listener {
             Pair.of(Material.WATER, Material.WATER_BUCKET)
     );
 
-    private final BukkitAudiences audience;
     private final Configuration configuration;
-    private final MiniMessage miniMessage = MiniMessage.miniMessage();
+    private final MessageSender messageSender;
 
     public PasteListener(Plugin plugin, Configuration configuration) {
-        audience = BukkitAudiences.create(plugin);
+        this.messageSender = MessageSender.getPluginMessageSender(plugin);
         this.configuration = configuration;
     }
 
@@ -54,7 +51,7 @@ public class PasteListener implements Listener {
         var limit = Permissions.Limit.limit(player);
 
         if (event.schematic().effectiveSize() > limit) {
-            audience.player(player).sendMessage(miniMessage.deserialize("<red>The schematic is too large."));
+            messageSender.sendMessage(player, "<red>The schematic is too large.");
             event.setCancelled(true);
             return;
         }
@@ -123,10 +120,10 @@ public class PasteListener implements Listener {
         }
 
         var missingItems = missing.entrySet().stream()
-                .map(e -> String.format("  <gold>- %s: <dark_aqua>%s", e.getKey(), e.getValue()))
-                .collect(Collectors.joining("\n"));
+                                  .map(e -> String.format("  <gold>- %s: <dark_aqua>%s", e.getKey(), e.getValue()))
+                                  .collect(Collectors.joining("\n"));
 
-        audience.player(player).sendMessage(miniMessage.deserialize("<red>Missing items to paste schematic:\n" + missingItems));
+        messageSender.sendMessage(player, "<red>Missing items to paste schematic:\n" + missingItems);
         event.setCancelled(true);
     }
 }

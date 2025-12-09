@@ -5,13 +5,13 @@ plugins {
     id("org.cadixdev.licenser") version "0.6.1"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("de.chojo.publishdata") version "1.2.4"
-    id("net.minecrell.plugin-yml.bukkit") version "0.5.3"
+    id("de.eldoria.plugin-yml.bukkit") version "0.8.0"
     java
     `maven-publish`
 }
 
 group = "de.eldoria"
-version = "1.1.0"
+version = "1.1.1"
 
 repositories {
     maven("https://eldonexus.de/repository/maven-public/")
@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("de.eldoria", "schematicbrushreborn-api", "2.5.0")
+    compileOnly("de.eldoria", "schematicbrushreborn-api", "2.7.8")
     compileOnly("org.spigotmc", "spigot-api", "1.13.2-R0.1-SNAPSHOT")
     compileOnly("com.sk89q.worldedit", "worldedit-bukkit", "7.2.14")
 
@@ -42,7 +42,9 @@ license {
 java {
     withSourcesJar()
     withJavadocJar()
-    sourceCompatibility = JavaVersion.VERSION_17
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 publishData {
@@ -90,31 +92,12 @@ tasks {
     }
 
     shadowJar {
-        relocate("de.eldoria.eldoutilities", "de.eldoria.schematicbrush.libs.eldoutilities")
-        relocate("de.eldoria.messageblocker", "de.eldoria.schematicbrush.libs.messageblocker")
+        val shadebase = "de.eldoria.schematicbrush.libs."
+        relocate("de.eldoria.messageblocker", shadebase + "messageblocker")
+        relocate("com.fasterxml", shadebase + "fasterxml")
+        relocate("de.eldoria.jacksonbukkit", shadebase + "jacksonbukkit")
+        relocate("de.eldoria.eldoutilities", shadebase + "utilities")
         mergeServiceFiles()
-    }
-
-    processResources {
-        from(sourceSets.main.get().resources.srcDirs) {
-            filesMatching("plugin.yml") {
-                expand(
-                        "version" to publishData.getVersion(true)
-                )
-            }
-            duplicatesStrategy = DuplicatesStrategy.INCLUDE
-        }
-    }
-
-    register<Copy>("copyToServer") {
-        val path = project.property("targetDir") ?: "";
-        if (path.toString().isEmpty()) {
-            println("targetDir is not set in gradle properties")
-            return@register
-        }
-        println("Copying jar to $path")
-        from(shadowJar)
-        destinationDir = File(path.toString())
     }
 
     build {
