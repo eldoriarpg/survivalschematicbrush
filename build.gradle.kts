@@ -3,7 +3,7 @@ import net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default
 
 plugins {
     id("org.cadixdev.licenser") version "0.6.1"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow") version "9.3.0"
     id("de.chojo.publishdata") version "1.2.4"
     id("de.eldoria.plugin-yml.bukkit") version "0.8.0"
     java
