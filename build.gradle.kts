@@ -59,7 +59,9 @@ spotless {
 publishData {
     eldoNexus(dev = false)
     component = "shadow"
-    buildData()
+    buildData {
+        put("lynaProduct", "7")
+    }
 }
 
 tasks {

@@ -24,12 +24,7 @@ import org.jetbrains.annotations.Nullable;
  * choice is written to {@code config.yml}.
  */
 public final class Updates {
-    /**
-     * Lyna's product id of Survival Schematic Brush.
-     */
-    static final int PRODUCT = 7;
 
-    static final String DOWNLOAD = "https://github.com/eldoriarpg/survivalschematicbrush/releases/latest";
     private final Plugin plugin;
     private final JacksonConfiguration configuration;
     private @Nullable Updater<LynaUpdateResponse, LynaUpdateData> updater;
@@ -71,13 +66,12 @@ public final class Updates {
     }
 
     private LynaUpdateData data(UpdateSettings settings) {
-        return LynaUpdateData.builder(plugin, PRODUCT)
+        return LynaUpdateData.builder(plugin)
                 .notifyPermission(Permissions.UPDATES)
                 .notifyUpdate(settings.notice())
                 .autoUpdate(settings.autoUpdate())
                 .askForAutoUpdate(settings.askForAutoUpdate())
                 .autoUpdateHook(this::decided)
-                .updateUrl(DOWNLOAD)
                 .build();
     }
 
