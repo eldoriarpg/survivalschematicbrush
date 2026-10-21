@@ -1,4 +1,5 @@
 import net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.FALSE
+import net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
 
 plugins {
     java
@@ -34,6 +35,7 @@ dependencies {
     compileOnly(platform(libs.jackson.bom))
     compileOnly(libs.bundles.jackson)
 
+    testImplementation(libs.eldoutil.updater)
     testImplementation(libs.junit.jupiter.api)
     testRuntimeOnly(libs.junit.platform.launcher)
     testRuntimeOnly(libs.junit.jupiter.engine)
@@ -126,6 +128,11 @@ bukkit {
         register("survivalschematicbrush.limit.<limit>") {
             default = FALSE
             description = "Set the max blocks a schematic can have"
+        }
+
+        register("survivalschematicbrush.updates") {
+            default = OP
+            description = "Get notified about new versions on join and download them"
         }
     }
 }
