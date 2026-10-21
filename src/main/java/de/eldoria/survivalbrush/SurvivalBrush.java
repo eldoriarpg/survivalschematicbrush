@@ -11,24 +11,23 @@ import de.eldoria.eldoutilities.messages.MessageSender;
 import de.eldoria.eldoutilities.plugin.EldoPlugin;
 import de.eldoria.eldoutilities.updater.lynaupdater.LynaUpdateChecker;
 import de.eldoria.eldoutilities.updater.lynaupdater.LynaUpdateData;
-import de.eldoria.survivalbrush.configuration.BlockSettings;
 import de.eldoria.survivalbrush.configuration.JacksonConfiguration;
-import de.eldoria.survivalbrush.configuration.LegacyConfiguration;
 import de.eldoria.survivalbrush.listener.PasteListener;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
-import java.util.List;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.logging.Level;
 
 public class SurvivalBrush extends EldoPlugin {
     @Override
     public void onPluginEnable() throws Throwable {
+        if (isPreJacksonInstall()) {
+            throw new IllegalStateException("The configuration was written by a version older than 1.1.0. Update to the latest 1.1 release first, start the server once, then update to this version.");
+        }
+
         var configuration = new JacksonConfiguration(this);
         PluginBaseConfiguration base = configuration.secondary(PluginBaseConfiguration.KEY);
         if (base.version() == 0) {
-            var legacyConfiguration = new LegacyConfiguration(this);
-            getLogger().log(Level.INFO, "Migrating configuration to jackson.");
-            configuration.main().blockSettings(legacyConfiguration.blockSettings());
             base.version(1);
             base.lastInstalledVersion(this);
             configuration.save();
@@ -42,13 +41,19 @@ public class SurvivalBrush extends EldoPlugin {
         registerListener(new PasteListener(this, configuration));
     }
 
-    @Override
-    public Level getLogLevel() {
-        return Level.INFO;
+    /**
+     * Checks whether the data folder still holds a configuration in the Bukkit serialization format used before 1.1.0.
+     *
+     * @return true if the main configuration contains Bukkit serialization markers
+     * @throws IOException if the configuration file can not be read
+     */
+    private boolean isPreJacksonInstall() throws IOException {
+        var config = getDataFolder().toPath().resolve("config.yml");
+        return Files.exists(config) && Files.readString(config).contains("==:");
     }
 
     @Override
-    public List<Class<? extends ConfigurationSerializable>> getConfigSerialization() {
-        return List.of(BlockSettings.class);
+    public Level getLogLevel() {
+        return Level.INFO;
     }
 }
