@@ -6,7 +6,6 @@
 
 package de.eldoria.survivalbrush.util;
 
-import de.eldoria.eldoutilities.permissions.PermUtil;
 import org.bukkit.entity.Player;
 
 public class Permissions {
@@ -41,7 +40,7 @@ public class Permissions {
 
         public static int limit(Player player) {
             if(player.hasPermission(BYPASS)) return Integer.MAX_VALUE;
-            return PermUtil.findHighestIntPermission(player, LIMIT + ".", 0);
+            return de.eldoria.eldoutilities.utils.Permissions.findHighestIntPermission(player, LIMIT + ".", 0);
         }
     }
 }

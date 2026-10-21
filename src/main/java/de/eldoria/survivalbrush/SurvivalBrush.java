@@ -7,6 +7,7 @@
 package de.eldoria.survivalbrush;
 
 import de.eldoria.eldoutilities.config.template.PluginBaseConfiguration;
+import de.eldoria.eldoutilities.messages.MessageSender;
 import de.eldoria.eldoutilities.plugin.EldoPlugin;
 import de.eldoria.eldoutilities.updater.lynaupdater.LynaUpdateChecker;
 import de.eldoria.eldoutilities.updater.lynaupdater.LynaUpdateData;
@@ -33,9 +34,17 @@ public class SurvivalBrush extends EldoPlugin {
             configuration.save();
         }
 
+        MessageSender.builder(this)
+                     .register();
+
         LynaUpdateChecker.lyna(LynaUpdateData.builder(this, 7).build()).start();
 
         registerListener(new PasteListener(this, configuration));
+    }
+
+    @Override
+    public Level getLogLevel() {
+        return Level.INFO;
     }
 
     @Override
