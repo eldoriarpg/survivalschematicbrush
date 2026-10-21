@@ -32,8 +32,8 @@ public class SurvivalBrush extends EldoPlugin {
         if (base.version() == 0) {
             base.version(1);
             base.lastInstalledVersion(this);
-            configuration.save();
         }
+        writeConfigs(configuration);
 
         MessageSender.builder(this)
                      .register();
@@ -63,5 +63,16 @@ public class SurvivalBrush extends EldoPlugin {
     @Override
     public Level getLogLevel() {
         return Level.INFO;
+    }
+
+    /**
+     * Writes the configuration files back, so keys added by this version appear in existing files. Only loaded files
+     * are saved, so the main configuration is loaded first.
+     *
+     * @param configuration configuration of the plugin
+     */
+    private static void writeConfigs(JacksonConfiguration configuration) {
+        configuration.main();
+        configuration.save();
     }
 }
