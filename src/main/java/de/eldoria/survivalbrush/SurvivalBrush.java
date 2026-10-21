@@ -9,16 +9,18 @@ package de.eldoria.survivalbrush;
 import de.eldoria.eldoutilities.config.template.PluginBaseConfiguration;
 import de.eldoria.eldoutilities.messages.MessageSender;
 import de.eldoria.eldoutilities.plugin.EldoPlugin;
-import de.eldoria.eldoutilities.updater.lynaupdater.LynaUpdateChecker;
-import de.eldoria.eldoutilities.updater.lynaupdater.LynaUpdateData;
 import de.eldoria.survivalbrush.configuration.JacksonConfiguration;
 import de.eldoria.survivalbrush.listener.PasteListener;
+import de.eldoria.survivalbrush.updates.Updates;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.logging.Level;
 
 public class SurvivalBrush extends EldoPlugin {
+    private @Nullable Updates updates;
+
     @Override
     public void onPluginEnable() throws Throwable {
         if (isPreJacksonInstall()) {
@@ -36,9 +38,15 @@ public class SurvivalBrush extends EldoPlugin {
         MessageSender.builder(this)
                      .register();
 
-        LynaUpdateChecker.lyna(LynaUpdateData.builder(this, 7).build()).start();
+        updates = new Updates(this, configuration);
+        updates.apply();
 
         registerListener(new PasteListener(this, configuration));
+    }
+
+    @Override
+    public void onPluginDisable() {
+        if (updates != null) updates.stop();
     }
 
     /**

@@ -23,4 +23,9 @@ public class JacksonConfiguration extends JacksonConfig<ConfigFile> implements C
     public BlockSettings blockSettings() {
         return main().blockSettings();
     }
+
+    @Override
+    public UpdateSettings updates() {
+        return main().updates();
+    }
 }
