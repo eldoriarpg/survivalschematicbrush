@@ -13,8 +13,4 @@ public class ConfigFile {
     public BlockSettings blockSettings() {
         return blockSettings;
     }
-
-    public void blockSettings(BlockSettings blockSettings) {
-        this.blockSettings = blockSettings;
-    }
 }

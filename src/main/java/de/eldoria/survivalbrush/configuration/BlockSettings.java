@@ -6,16 +6,12 @@
 
 package de.eldoria.survivalbrush.configuration;
 
-import de.eldoria.eldoutilities.serialization.SerializationUtil;
 import org.bukkit.Material;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Map;
 
 @SuppressWarnings("FieldMayBeFinal")
-public class BlockSettings implements ConfigurationSerializable {
+public class BlockSettings {
     private static final List<Material> DEFAULT_BLACKLIST = List.of(Material.SHULKER_BOX,
             Material.WHITE_SHULKER_BOX,
             Material.ORANGE_SHULKER_BOX,
@@ -39,19 +35,6 @@ public class BlockSettings implements ConfigurationSerializable {
 
     public BlockSettings() {
         pasteBlacklist = DEFAULT_BLACKLIST;
-    }
-
-    public BlockSettings(Map<String, Object> objectMap) {
-        var map = SerializationUtil.mapOf(objectMap);
-        pasteBlacklist = map.getValueOrDefault("pasteBlacklist", DEFAULT_BLACKLIST, Material.class);
-    }
-
-    @Override
-    @NotNull
-    public Map<String, Object> serialize() {
-        return SerializationUtil.newBuilder()
-                .addEnum("pasteBlacklist", pasteBlacklist)
-                .build();
     }
 
     public List<Material> pasteBlacklist() {

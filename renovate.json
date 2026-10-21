@@ -1,10 +1,5 @@
 {
-  "baseBranches": ["dev"],
-  "dependencyDashboard": true,
-  "labels": ["dependencies"],
-  "extends": ["config:base"],
-  "ignoreDeps": ["spigot-api"],
-  "reviewers": ["RainbowDashLabs"],
-  "prConcurrentLimit": 3,
-  "prHourlyLimit": 10
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["local>eldoriarpg/.github"],
+  "baseBranchPatterns": ["main"]
 }

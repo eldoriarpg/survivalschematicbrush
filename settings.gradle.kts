@@ -1,13 +1,12 @@
 rootProject.name = "SurvivalSchematicBrush"
 
-pluginManagement{
-    repositories{
+pluginManagement {
+    repositories {
         mavenLocal()
         gradlePluginPortal()
-        maven{
+        maven {
             name = "EldoNexus"
             url = uri("https://eldonexus.de/repository/maven-public/")
-
         }
     }
 }
