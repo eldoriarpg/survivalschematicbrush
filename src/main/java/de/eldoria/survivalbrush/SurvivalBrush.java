@@ -19,6 +19,7 @@ import java.nio.file.Files;
 import java.util.logging.Level;
 
 public class SurvivalBrush extends EldoPlugin {
+    private @Nullable JacksonConfiguration configuration;
     private @Nullable Updates updates;
 
     @Override
@@ -28,12 +29,14 @@ public class SurvivalBrush extends EldoPlugin {
         }
 
         var configuration = new JacksonConfiguration(this);
+        this.configuration = configuration;
         PluginBaseConfiguration base = configuration.secondary(PluginBaseConfiguration.KEY);
         if (base.version() == 0) {
             base.version(1);
             base.lastInstalledVersion(this);
             configuration.save();
         }
+        setLoggerLevel();
 
         MessageSender.builder(this)
                      .register();
@@ -60,8 +63,15 @@ public class SurvivalBrush extends EldoPlugin {
         return Files.exists(config) && Files.readString(config).contains("==:");
     }
 
+    /**
+     * Reads the log level from {@code base_configuration.yml}. Before the configuration is loaded on enable, the logger
+     * runs on {@link Level#INFO}; the level from the file applies once it is loaded.
+     *
+     * @return the configured log level, or {@link Level#INFO} while the configuration is not loaded yet
+     */
     @Override
     public Level getLogLevel() {
-        return Level.INFO;
+        if (configuration == null) return Level.INFO;
+        return configuration.secondary(PluginBaseConfiguration.KEY).logLevel();
     }
 }
