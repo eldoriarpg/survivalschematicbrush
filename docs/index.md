@@ -59,7 +59,7 @@ For everyone else, each paste goes through these checks:
 
 1. **Size.** The schematic may have at most as many blocks as the player's limit. Air does not count.
    If it is bigger, the paste is stopped with "The schematic is too large."
-2. **Materials.** The add-on counts the blocks of each type in the schematic.
+2. **Materials.** The add-on counts the items needed to place the blocks of the schematic.
    Air of every kind, including cave air and void air, and blacklisted blocks are not counted.
    Water and lava count as water buckets and lava buckets.
 3. **Inventory.** It compares the count with the player's inventory.
@@ -71,8 +71,10 @@ Only the main inventory and hotbar count. Armor slots and the off hand do not.
 Items with a custom name, enchantments or other extra data do not count and are not taken, so a player never loses a special item.
 
 :::note Things to know
-- One block costs one item of the same type. A water or lava block costs a full bucket, and the bucket is taken with it.
-- Some blocks have no item of their own, for example wall torches or redstone wire. A schematic with such blocks cannot be paid for.
+- A block costs the item you would place it with. A wall torch costs a torch, redstone wire costs redstone and wheat costs wheat seeds.
+- A block made of two parts costs one item. A door, a bed or a tall flower costs one door, one bed or one flower.
+- A water or lava block costs a full bucket, and the bucket is taken with it.
+- A few blocks cannot be placed with any item, for example end portals or nether portals. A schematic with such blocks cannot be paid for.
 - The blacklist protects against copying chest contents. See [Configuration](./configuration.md).
 :::
 

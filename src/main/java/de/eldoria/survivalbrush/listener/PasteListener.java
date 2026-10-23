@@ -8,28 +8,25 @@ package de.eldoria.survivalbrush.listener;
 
 import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import de.eldoria.eldoutilities.container.Pair;
+import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import de.eldoria.eldoutilities.messages.MessageSender;
 import de.eldoria.schematicbrush.event.PrePasteEvent;
 import de.eldoria.survivalbrush.configuration.Configuration;
 import de.eldoria.survivalbrush.payment.Payment;
+import de.eldoria.survivalbrush.payment.Price;
 import de.eldoria.survivalbrush.util.Permissions;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class PasteListener implements Listener {
-    private static final List<Pair<Material, Material>> itemBlockMappings = List.of(
-            Pair.of(Material.LAVA, Material.LAVA_BUCKET),
-            Pair.of(Material.WATER, Material.WATER_BUCKET)
-    );
-
     private final Configuration configuration;
     private final MessageSender messageSender;
 
@@ -54,24 +51,13 @@ public class PasteListener implements Listener {
             return;
         }
 
-        var blockCount = new HashMap<>(event.schematic().blockCount());
-        blockCount.keySet().removeIf(Material::isAir);
-
-        for (var mapping : itemBlockMappings) {
-            var amount = blockCount.remove(mapping.first);
-            if (amount == null) continue;
-            blockCount.put(mapping.second, amount);
-        }
-
-        for (var material : configuration.blockSettings().pasteBlacklist()) {
-            blockCount.remove(material);
-        }
+        var clipboard = event.paste().clipboard();
+        var price = Price.of(blockStates(clipboard), configuration.blockSettings());
 
         var payment = new Payment(player.getInventory());
-        var missing = payment.missing(blockCount);
+        var missing = payment.missing(price);
 
         if (missing.isEmpty()) {
-            var clipboard = event.paste().clipboard();
             for (var current : clipboard.getRegion()) {
                 var block = clipboard.getBlock(current);
                 if (configuration.blockSettings().isBlacklisted(BukkitAdapter.adapt(block).getMaterial())) {
@@ -83,7 +69,7 @@ public class PasteListener implements Listener {
                 }
             }
 
-            payment.take(blockCount);
+            payment.take(price);
             return;
         }
 
@@ -93,5 +79,13 @@ public class PasteListener implements Listener {
 
         messageSender.sendMessage(player, "<red>Missing items to paste schematic:\n" + missingItems);
         event.setCancelled(true);
+    }
+
+    private static Map<BlockData, Integer> blockStates(Clipboard clipboard) {
+        Map<BlockData, Integer> blocks = new HashMap<>();
+        for (var countable : clipboard.getBlockDistributionWithData(clipboard.getRegion())) {
+            blocks.merge(BukkitAdapter.adapt(countable.getID()), countable.getAmount(), Integer::sum);
+        }
+        return blocks;
     }
 }
