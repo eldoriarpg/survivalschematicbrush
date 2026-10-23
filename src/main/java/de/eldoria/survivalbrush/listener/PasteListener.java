@@ -12,18 +12,16 @@ import de.eldoria.eldoutilities.container.Pair;
 import de.eldoria.eldoutilities.messages.MessageSender;
 import de.eldoria.schematicbrush.event.PrePasteEvent;
 import de.eldoria.survivalbrush.configuration.Configuration;
+import de.eldoria.survivalbrush.payment.Payment;
 import de.eldoria.survivalbrush.util.Permissions;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class PasteListener implements Listener {
@@ -69,23 +67,8 @@ public class PasteListener implements Listener {
             blockCount.remove(material);
         }
 
-        var inv = player.getInventory();
-
-        Map<Material, Integer> missing = new EnumMap<>(Material.class);
-        Map<Material, Integer> invCount = new EnumMap<>(Material.class);
-
-
-        for (var content : inv.getStorageContents()) {
-            if (content == null) continue;
-            invCount.compute(content.getType(), (k, v) -> v == null ? content.getAmount() : v + content.getAmount());
-        }
-
-        for (var block : blockCount.entrySet()) {
-            var invAmount = invCount.getOrDefault(block.getKey(), 0);
-            if (invAmount < block.getValue()) {
-                missing.put(block.getKey(), block.getValue() - invAmount);
-            }
-        }
+        var payment = new Payment(player.getInventory());
+        var missing = payment.missing(blockCount);
 
         if (missing.isEmpty()) {
             var clipboard = event.paste().clipboard();
@@ -100,22 +83,7 @@ public class PasteListener implements Listener {
                 }
             }
 
-            for (var entry : blockCount.entrySet()) {
-                var slots = inv.all(entry.getKey());
-                var toTake = entry.getValue();
-                var contained = 0;
-                for (var slot : slots.entrySet()) {
-                    var stack = slot.getValue();
-                    // We skip not normal items like filled shulker boxes in order to avoid item loss
-                    if (!stack.isSimilar(new ItemStack(entry.getKey()))) continue;
-                    var take = Math.min(stack.getAmount(), toTake - contained);
-                    stack.setAmount(stack.getAmount() - take);
-                    contained += take;
-                    if (contained == toTake) {
-                        break;
-                    }
-                }
-            }
+            payment.take(blockCount);
             return;
         }
 

@@ -68,7 +68,7 @@ For everyone else, each paste goes through these checks:
    Blacklisted blocks are replaced with air.
 
 Only the main inventory and hotbar count. Armor slots and the off hand do not.
-Items with a custom name, enchantments or other extra data are not taken, so a player never loses a special item.
+Items with a custom name, enchantments or other extra data do not count and are not taken, so a player never loses a special item.
 
 :::note Things to know
 - One block costs one item of the same type. A water or lava block costs a full bucket, and the bucket is taken with it.
