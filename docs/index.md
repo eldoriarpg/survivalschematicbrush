@@ -57,7 +57,7 @@ Players with `survivalschematicbrush.paste.bypass` also paste as usual.
 
 For everyone else, each paste goes through these checks:
 
-1. **Size.** The schematic may have at most as many blocks as the player's limit. Air does not count.
+1. **Size.** The schematic may have at most as many blocks as the player's limit. Air of every kind, including cave air and void air, does not count.
    If it is bigger, the paste is stopped with "The schematic is too large."
 2. **Materials.** The add-on counts the items needed to place the blocks of the schematic.
    Air of every kind, including cave air and void air, and blacklisted blocks are not counted.
