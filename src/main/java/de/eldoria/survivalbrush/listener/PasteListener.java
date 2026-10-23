@@ -60,7 +60,9 @@ public class PasteListener implements Listener {
         if (missing.isEmpty()) {
             for (var current : clipboard.getRegion()) {
                 var block = clipboard.getBlock(current);
-                if (configuration.blockSettings().isBlacklisted(BukkitAdapter.adapt(block).getMaterial())) {
+                if (configuration
+                        .blockSettings()
+                        .isBlacklisted(BukkitAdapter.adapt(block).getMaterial())) {
                     try {
                         clipboard.setBlock(current, BukkitAdapter.adapt(Material.AIR.createBlockData()));
                     } catch (WorldEditException e) {
@@ -77,8 +79,8 @@ public class PasteListener implements Listener {
         }
 
         var missingItems = missing.entrySet().stream()
-                                  .map(e -> String.format("  <gold>- %s: <dark_aqua>%s", e.getKey(), e.getValue()))
-                                  .collect(Collectors.joining("\n"));
+                .map(e -> String.format("  <gold>- %s: <dark_aqua>%s", e.getKey(), e.getValue()))
+                .collect(Collectors.joining("\n"));
 
         messageSender.sendMessage(player, "<red>Missing items to paste schematic:\n" + missingItems);
         event.setCancelled(true);

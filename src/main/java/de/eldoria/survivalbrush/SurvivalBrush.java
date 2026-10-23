@@ -25,7 +25,8 @@ public class SurvivalBrush extends EldoPlugin {
     @Override
     public void onPluginEnable() throws Throwable {
         if (isPreJacksonInstall()) {
-            throw new IllegalStateException("The configuration was written by a version older than 1.1.0. Update to the latest 1.1 release first, start the server once, then update to this version.");
+            throw new IllegalStateException(
+                    "The configuration was written by a version older than 1.1.0. Update to the latest 1.1 release first, start the server once, then update to this version.");
         }
 
         var configuration = new JacksonConfiguration(this);
@@ -38,8 +39,7 @@ public class SurvivalBrush extends EldoPlugin {
         }
         setLoggerLevel();
 
-        MessageSender.builder(this)
-                     .register();
+        MessageSender.builder(this).register();
 
         updates = new Updates(this, configuration);
         updates.apply();

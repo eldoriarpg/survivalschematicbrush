@@ -18,7 +18,6 @@ public class JacksonConfiguration extends JacksonConfig<ConfigFile> implements C
         super(plugin, Key.builder(Path.of("config.yml"), ConfigFile::new).build());
     }
 
-
     @Override
     public BlockSettings blockSettings() {
         return main().blockSettings();

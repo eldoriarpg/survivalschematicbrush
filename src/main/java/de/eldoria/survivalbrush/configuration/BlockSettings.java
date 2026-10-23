@@ -12,7 +12,8 @@ import java.util.List;
 
 @SuppressWarnings("FieldMayBeFinal")
 public class BlockSettings {
-    private static final List<Material> DEFAULT_BLACKLIST = List.of(Material.SHULKER_BOX,
+    private static final List<Material> DEFAULT_BLACKLIST = List.of(
+            Material.SHULKER_BOX,
             Material.WHITE_SHULKER_BOX,
             Material.ORANGE_SHULKER_BOX,
             Material.MAGENTA_SHULKER_BOX,

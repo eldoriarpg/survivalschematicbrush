@@ -44,7 +44,7 @@ public class Permissions {
         public static final String BYPASS = perm(LIMIT, "bypass");
 
         public static int limit(Player player) {
-            if(player.hasPermission(BYPASS)) return Integer.MAX_VALUE;
+            if (player.hasPermission(BYPASS)) return Integer.MAX_VALUE;
             return de.eldoria.eldoutilities.utils.Permissions.findHighestIntPermission(player, LIMIT + ".", 0);
         }
     }
