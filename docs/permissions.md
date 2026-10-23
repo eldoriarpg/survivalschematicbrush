@@ -17,7 +17,7 @@ The checks only apply to players in survival mode, see [What happens on a paste]
 
 ## Size limit
 
-The size of a schematic is the number of its blocks, without air.
+The size of a schematic is the number of its blocks, without air of any kind (air, cave air and void air).
 
 Give each group of players a limit permission with the number you want:
 

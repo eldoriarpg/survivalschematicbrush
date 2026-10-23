@@ -12,6 +12,7 @@ import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import de.eldoria.eldoutilities.messages.MessageSender;
 import de.eldoria.schematicbrush.event.PrePasteEvent;
 import de.eldoria.survivalbrush.configuration.Configuration;
+import de.eldoria.survivalbrush.limit.PasteSize;
 import de.eldoria.survivalbrush.payment.Payment;
 import de.eldoria.survivalbrush.payment.Price;
 import de.eldoria.survivalbrush.util.Permissions;
@@ -44,15 +45,16 @@ public class PasteListener implements Listener {
         if (player.hasPermission(Permissions.Paste.BYPASS)) return;
 
         var limit = Permissions.Limit.limit(player);
+        var clipboard = event.paste().clipboard();
+        var blocks = blockStates(clipboard);
 
-        if (event.schematic().effectiveSize() > limit) {
+        if (PasteSize.of(blocks) > limit) {
             messageSender.sendMessage(player, "<red>The schematic is too large.");
             event.setCancelled(true);
             return;
         }
 
-        var clipboard = event.paste().clipboard();
-        var price = Price.of(blockStates(clipboard), configuration.blockSettings());
+        var price = Price.of(blocks, configuration.blockSettings());
 
         var payment = new Payment(player.getInventory());
         var missing = payment.missing(price);
