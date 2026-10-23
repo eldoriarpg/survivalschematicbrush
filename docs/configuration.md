@@ -79,5 +79,9 @@ Choosing "enable-auto" in the chat message sets `autoUpdate` to `true`. Choosing
 
 ## base_configuration.yml
 
-The add-on also writes a `base_configuration.yml` for its own bookkeeping. Do not change it.
-Its `logLevel` key has no effect in this add-on.
+The add-on also writes a `base_configuration.yml` for its own bookkeeping.
+Leave `version` and `lastInstalledVersion` as they are.
+
+| Key | Default | What it does |
+|---|---|---|
+| `logLevel` | `INFO` | How much the add-on writes to the console. Use a Java log level such as `WARNING`, `INFO`, `CONFIG` or `FINE`. It takes effect on the next start. |

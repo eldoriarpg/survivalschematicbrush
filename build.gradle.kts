@@ -37,6 +37,10 @@ dependencies {
     compileOnly(libs.bundles.jackson)
 
     testImplementation(libs.eldoutil.updater)
+    testImplementation(libs.paper)
+    testImplementation(libs.jetbrains.annotations)
+    testImplementation(libs.mockbukkit)
+    testImplementation(libs.mockito)
     testImplementation(libs.junit.jupiter.api)
     testRuntimeOnly(libs.junit.platform.launcher)
     testRuntimeOnly(libs.junit.jupiter.engine)
