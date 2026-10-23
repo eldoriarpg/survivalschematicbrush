@@ -70,6 +70,9 @@ public class PasteListener implements Listener {
             }
 
             payment.take(price);
+            for (var leftover : payment.returnContainers(price)) {
+                player.getWorld().dropItem(player.getLocation(), leftover);
+            }
             return;
         }
 

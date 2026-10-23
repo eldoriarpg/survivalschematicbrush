@@ -17,6 +17,7 @@ import org.mockbukkit.mockbukkit.MockBukkit;
 import org.mockbukkit.mockbukkit.ServerMock;
 
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -72,6 +73,53 @@ class PaymentTest {
         new Payment(inventory).take(Map.of(Material.STONE, 100));
 
         assertEquals(28, amount(inventory, false));
+    }
+
+    @Test
+    void filledBucketsComeBackEmpty() {
+        var inventory = inventoryWith(ItemStack.of(Material.WATER_BUCKET), ItemStack.of(Material.LAVA_BUCKET));
+        var payment = new Payment(inventory);
+        var price = Map.of(Material.WATER_BUCKET, 1, Material.LAVA_BUCKET, 1);
+
+        payment.take(price);
+        var leftover = payment.returnContainers(price);
+
+        assertTrue(leftover.isEmpty());
+        assertEquals(Map.of(Material.BUCKET, 2), contents(inventory));
+    }
+
+    @Test
+    void bucketsThatDoNotFitAreHandedBack() {
+        var inventory = inventoryWith();
+        for (var slot = 0; slot < inventory.getSize(); slot++) {
+            inventory.setItem(slot, ItemStack.of(Material.DIRT, 64));
+        }
+        var payment = new Payment(inventory);
+
+        var leftover = payment.returnContainers(Map.of(Material.WATER_BUCKET, 20));
+
+        assertEquals(20, leftover.stream().mapToInt(ItemStack::getAmount).sum());
+    }
+
+    @Test
+    void otherItemsLeaveNoContainer() {
+        var inventory = inventoryWith(ItemStack.of(Material.STONE, 4));
+        var payment = new Payment(inventory);
+        var price = Map.of(Material.STONE, 4);
+
+        payment.take(price);
+        payment.returnContainers(price);
+
+        assertTrue(contents(inventory).isEmpty());
+    }
+
+    private static Map<Material, Integer> contents(Inventory inventory) {
+        Map<Material, Integer> contents = new EnumMap<>(Material.class);
+        for (var stack : inventory.getStorageContents()) {
+            if (stack == null || stack.isEmpty()) continue;
+            contents.merge(stack.getType(), stack.getAmount(), Integer::sum);
+        }
+        return contents;
     }
 
     private Inventory inventoryWith(ItemStack... stacks) {

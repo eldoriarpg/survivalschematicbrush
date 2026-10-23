@@ -10,7 +10,10 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,8 +21,13 @@ import java.util.Map;
  * <p>
  * Only plain stacks pay: a stack with a custom name, enchantments, contents or any other extra data is neither counted
  * nor taken, so a player never loses a special item and never passes the check with items that are not taken.
+ * <p>
+ * Filled buckets come back empty, like after placing water or lava by hand.
  */
 public final class Payment {
+    private static final Map<Material, Material> EMPTY_CONTAINERS =
+            Map.of(Material.WATER_BUCKET, Material.BUCKET, Material.LAVA_BUCKET, Material.BUCKET);
+
     private final Inventory inventory;
 
     /**
@@ -63,6 +71,27 @@ public final class Payment {
             }
         }
         inventory.setStorageContents(contents);
+    }
+
+    /**
+     * Gives back the empty containers of the filled items in a price. Call it after {@link #take(Map)}.
+     *
+     * @param price the price that was taken
+     * @return the containers that did not fit into the inventory
+     */
+    public Collection<ItemStack> returnContainers(Map<Material, Integer> price) {
+        List<ItemStack> containers = new ArrayList<>();
+        for (var entry : price.entrySet()) {
+            var container = EMPTY_CONTAINERS.get(entry.getKey());
+            if (container == null) continue;
+            var remaining = entry.getValue();
+            while (remaining > 0) {
+                var amount = Math.min(remaining, container.getMaxStackSize());
+                containers.add(ItemStack.of(container, amount));
+                remaining -= amount;
+            }
+        }
+        return inventory.addItem(containers.toArray(ItemStack[]::new)).values();
     }
 
     private Map<Material, Integer> available() {

@@ -65,6 +65,7 @@ For everyone else, each paste goes through these checks:
 3. **Inventory.** It compares the count with the player's inventory.
    If something is missing, the paste is stopped and the player sees a list of the missing items and amounts.
 4. **Paste.** If everything is there, the items are taken from the inventory and the schematic is pasted.
+   Empty buckets go back into the inventory.
    Blacklisted blocks are replaced with air.
 
 Only the main inventory and hotbar count. Armor slots and the off hand do not.
@@ -73,7 +74,7 @@ Items with a custom name, enchantments or other extra data do not count and are 
 :::note Things to know
 - A block costs the item you would place it with. A wall torch costs a torch, redstone wire costs redstone and wheat costs wheat seeds.
 - A block made of two parts costs one item. A door, a bed or a tall flower costs one door, one bed or one flower.
-- A water or lava block costs a full bucket, and the bucket is taken with it.
+- A water or lava block costs a full bucket. The player gets the empty bucket back, just like placing water or lava by hand. If the inventory is full, the empty buckets drop at the player's feet.
 - A few blocks cannot be placed with any item, for example end portals or nether portals. A schematic with such blocks cannot be paid for.
 - The blacklist protects against copying chest contents. See [Configuration](./configuration.md).
 :::
