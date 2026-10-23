@@ -55,7 +55,7 @@ public class PasteListener implements Listener {
         }
 
         var blockCount = new HashMap<>(event.schematic().blockCount());
-        blockCount.remove(Material.AIR);
+        blockCount.keySet().removeIf(Material::isAir);
 
         for (var mapping : itemBlockMappings) {
             var amount = blockCount.remove(mapping.first);

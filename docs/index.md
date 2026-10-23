@@ -60,7 +60,7 @@ For everyone else, each paste goes through these checks:
 1. **Size.** The schematic may have at most as many blocks as the player's limit. Air does not count.
    If it is bigger, the paste is stopped with "The schematic is too large."
 2. **Materials.** The add-on counts the blocks of each type in the schematic.
-   Air and blacklisted blocks are not counted.
+   Air of every kind, including cave air and void air, and blacklisted blocks are not counted.
    Water and lava count as water buckets and lava buckets.
 3. **Inventory.** It compares the count with the player's inventory.
    If something is missing, the paste is stopped and the player sees a list of the missing items and amounts.
