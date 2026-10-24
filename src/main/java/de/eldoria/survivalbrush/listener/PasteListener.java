@@ -67,8 +67,7 @@ public class PasteListener implements Listener {
                         .isBlacklisted(BukkitAdapter.adapt(block).getMaterial())) {
                     try {
                         clipboard.setBlock(current, BukkitAdapter.adapt(Material.AIR.createBlockData()));
-                    } catch (WorldEditException e) {
-                        // ignore
+                    } catch (WorldEditException ignored) {
                     }
                 }
             }
